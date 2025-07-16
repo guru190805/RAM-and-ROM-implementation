@@ -2,12 +2,18 @@
 module RAM(data, r, address, clk, en, out);
     input [7:0] data;        // Input data
     input [5:0] address;     // Address bus
-    input r, en, clk;        // Control signals
+    input r, en, clk,reset_n;        // Control signals
     output reg [7:0] out;    // Output data
     
     reg [7:0] ram[0:63];     // Memory array: 64 locations x 8-bit
-
-    always @(posedge clk) begin
+    reg latch;
+    wire gated_clk;
+    always @(clk or en or reset_n ) begin
+        if(!reset_n) latch <=0;
+        else latch <= en;
+    end
+    assign gated_clk = clk && latch;
+    always @(posedge gated_clk) begin
         if(en) begin
             if(r) out <= ram[address];      // Read operation
             else ram[address] <= data;       // Write operation
