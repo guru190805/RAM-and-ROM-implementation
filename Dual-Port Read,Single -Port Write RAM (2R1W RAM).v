@@ -8,7 +8,7 @@ module RAM_2R1W(
     input clk,                      
     input rst_n,                    // Active low reset
     input en,                       
-    output reg [7:0] rd_data1,     
+    output reg [7:0] rd_data1,    
     output reg [7:0] rd_data2     
 );
     
